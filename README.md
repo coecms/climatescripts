@@ -11,18 +11,15 @@ Contributing
 
     git clone git@github.com:ScottWales/climatescripts
 
-3. Branch: Create a branch for new functionality
-
-    git checkout -b 'fieldsfile'
 
 4. Edit: Add in your changes
 5. Commit: Commit your changes and push them to your github account
 
     git commit -a -m "Added new fieldsfile functions"
     
-    git push origin fieldsfile
+    git push
 
-6. Pull request: Press the pull request button on github and select the branch to send
+6. Pull request: Press the pull request button on github
 
 Updating your local repository
 ------------------------------
