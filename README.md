@@ -16,9 +16,10 @@ Contributing
     git checkout -b 'fieldsfile'
 
 4. Edit: Add in your changes
-5. Commit: Commit your changes
+5. Commit: Commit your changes and push them to your github account
 
     git commit -a -m "Added new fieldsfile functions"
-    git push
+    
+    git push origin fieldsfile
 
 6. Pull request: Press the pull request button on github and select the branch to send
