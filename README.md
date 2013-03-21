@@ -14,8 +14,8 @@ https://github.com/"Your_Github_username"/climatescripts.git
 5. Follow the instructions from github on setting ssh-key transfer:
 https://help.github.com/articles/generating-ssh-keys
 6. Once done, cd to that directory, and Checkout the repository with git clone:
-    
-       git clone git@github.com:"Your_Github_username"/climatescripts.git
+
+        git clone git@github.com:"Your_Github_username"/climatescripts.git
 
 7. Edit existing files or add your own
 8. Run git status - This tells you what files are being tracked, have changed etc.
