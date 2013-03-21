@@ -15,16 +15,16 @@ https://github.com/"Your_Github_username"/climatescripts.git
 https://help.github.com/articles/generating-ssh-keys
 6. Once done, cd to that directory, and Checkout the repository with git clone:
     
-   git clone git@github.com:"Your_Github_username"/climatescripts.git
+       git clone git@github.com:"Your_Github_username"/climatescripts.git
 
 7. Edit existing files or add your own
 8. Run git status - This tells you what files are being tracked, have changed etc.
 9. If you want to add new script file, use git add "file_name".
 9.  Commit: Commit your changes and push them to your github account
  
-    git commit -a -m "A useful message"
+        git commit -a -m "A useful message"
     
-    git push
+        git push
 
 6. Pull request: Go to  https://github.com/coecms/climatescripts, Press the pull request button on github (you will need to add a mesage). This sends a message to the admin person that you have added stuff, and that person decides whether to merge the code into the repository
 
