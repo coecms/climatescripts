@@ -44,7 +44,6 @@ Some Considerations
 
 Please comment/document and indent your code - In Python, you do not get a choice, but not all other languages
 Please review other people's code whenever possible
-Very good basic GIT tutorials can be found at: 
-http://git-scm.com/book/en/Getting-Started-Git-Basics
-In a netshell: git status; git add; git commit; git push
+Very good basic GIT tutorials can be found at: http://git-scm.com/book/en/Getting-Started-Git-Basics
+In a netshell: git status; git add; git commit; git push; pull request
 It is usually better to commit incrementally, rather than once-off with lots of changes to the code 
