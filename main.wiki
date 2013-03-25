@@ -1,0 +1,11 @@
+Welcome to the **climatescripts** wiki!
+
+A collaborative effort among the researchers and students of the [ARC Centre of Excellence for Climate Science System & Climate Change Research Center, UNSW, Sydney, Australia](http://www.ccrc.unsw.edu.au/index.html)
+
+A GIT repository of useful functions and scripts in different languages, tested and used in the research activities
+
+## python ##
+[python scripts](https://github.com/LluisFita/climatescripts/wiki/python)
+
+## Shell scripting ##
+[shell scripts](https://github.com/LluisFita/climatescripts/wiki/shell)
