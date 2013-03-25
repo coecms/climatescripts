@@ -1,0 +1,70 @@
+function decimal2binary() {
+# Transforms a number to its binary in base 2
+#
+# output formats:
+#   base2: String with bits from 2^[nbits-1] to 1
+#   pot2: decomposition of number in 2 power series: 2^[nbits-1] 2^[nbits-2] ...
+#      2^[0] 
+## g.e. #
+# $ decimal2binary 33 7 base2
+# 0100001
+# $ decimal2binary 33 7 pot2
+# 32 1
+
+  decimal=$1
+  nbits=$2
+  oformat=$3
+
+# Checking range
+##
+  nbit0=`expr $nbits`
+  maximbit=`echo "2 "$nbit0 | awk '{print $1^$2}'`
+  if test $maximbit -le $1
+  then
+    echo "ERROR -- error -- ERROR: Number "$decimal" is too big for "$nbits\
+      " nbits!!!!!!"
+    exit
+  fi
+
+# Giving bits
+##
+  diff=$decimal
+  base2=''
+  pot2=''
+  ibit=`expr $nbits - 1`
+  while test $ibit -ge 0
+  do
+    bit=`echo "2 "${ibit} | awk '{print $1^$2}'`
+    if test $bit -le $diff
+    then
+      diff=`(expr $diff - $bit)`
+#      echo "bit "$ibit": "$bit" dif= "$diff
+      base2=$base2"1"
+      pot2=$pot2" "$bit
+    else
+      base2=$base2"0"
+    fi
+    ibit=`(expr $ibit - 1)`
+  done
+  if test $diff -le 0
+  then
+
+#    echo "Decomposition ended"
+##
+    case $oformat in
+      'pot2')
+        echo $pot2
+      ;;
+      'base2')
+        echo $base2
+      ;;
+      esac
+#    exit
+
+  else
+    echo "Error !!!!"
+    echo "Decomposition not ended!"$diferencia
+    exit
+  fi
+}
+

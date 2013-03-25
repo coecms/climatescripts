@@ -1,0 +1,22 @@
+function isin_list() {
+# Function to check whether a value is in a list of values separated by ':'
+## g.e. #
+# $ if test $(isin_list Climate:Change:Research:Center Excellence); then
+# $  echo "It is there!"
+# $ else
+# $  echo "It is not there!"
+# $ fi
+# It is not there!
+#
+  list=$1
+  value=$2
+  
+  is=`echo ${list} | tr ':' '\n' | awk '{print "@"$1"@"}' | grep '@'${value}'@' | wc -w`
+  if test ${is} -eq 1
+  then
+    true
+  else
+    false
+  fi
+}
+

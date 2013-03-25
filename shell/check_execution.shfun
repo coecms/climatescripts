@@ -1,0 +1,22 @@
+function check_execution() {
+# Checking if the execution of a program has worked
+## g.e.# 
+# $ ls -J
+# $ check_execution $? $*
+#
+#ERROR -- error -- ERROR -- error 2
+#  ls -J
+#
+  oexec=$1
+  program=$2
+
+  errmsg='ERROR -- error -- ERROR -- error'
+
+  if test ! $oexec -eq 0; then
+    echo ${errmsg}" "${oexec}
+    echo "  execution failed!"
+    echo "  "${program}
+    exit
+  fi
+}
+

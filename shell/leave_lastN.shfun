@@ -1,0 +1,15 @@
+function leave_lastN() {
+# Function to leave last N characters
+## g.e. # 
+# $ leave_lastN Einstein 3
+# Einst
+#
+  string=$1
+  N=$2
+  Lstring=`expr length $string`
+  
+  Estring=`expr $Lstring - $N`
+  newstring=`expr substr ${string} 1 ${Estring}`
+  echo $newstring
+}
+

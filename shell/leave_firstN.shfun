@@ -1,0 +1,17 @@
+function leave_firstN() {
+# Function to leave first N characters
+## g.e. #
+# $ leave_firstN Einstein 3
+# stein
+#
+  string=$1
+  N=$2
+  
+  N1=`expr $N + 1`
+  Lstring=`expr length $string`
+  
+  Estring=`expr $Lstring - $N`
+  newstring=`expr substr ${string} $N1 ${Estring}`
+  echo $newstring
+}
+

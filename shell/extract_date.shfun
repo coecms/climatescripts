@@ -1,0 +1,74 @@
+function extract_date () {
+# Function to give date in any format and give any output
+## g.e. #
+# $ extract_date 19760217000000 TmdHMS Y-m-dTH:M:S
+# 1976-02-17T00:00:00
+#
+  date=$1
+  input=$2
+  output=$3
+  case ${input} in
+    'TmdHMS')
+##  [YYYY][MM][DD]T[HH][MI][SS]
+      year=`expr substr ${date} 1 4`
+      month=`expr substr ${date} 5 2`
+      day=`expr substr ${date} 7 2`
+      hour=`expr substr ${date} 10 2`
+      minute=`expr substr ${date} 12 2`
+      second=`expr substr ${date} 14 2`
+    ;;
+    'ymdHMS')
+##  [YY][MM][DD][HH][MI][SS]
+      year=`expr substr ${date} 1 4`
+      month=`expr substr ${date} 5 2`
+      day=`expr substr ${date} 7 2`
+      hour=`expr substr ${date} 9 2`
+      minute=`expr substr ${date} 11 2`
+      econd=`expr substr ${date} 13 2`
+      if test ${year} -gt 40
+      then
+        year='19'${year}
+      else
+        year='20'${year}
+      fi
+
+    ;;
+    'Y-m-d_H:M:S')
+##  [YYYY]-[MM]-[DD]_[HH]:[MI]:[SS]
+      year=`expr substr ${date} 1 4`
+      month=`expr substr ${date} 6 2`
+      day=`expr substr ${date} 9 2`
+      hour=`expr substr ${date} 12 2`
+      minute=`expr substr ${date} 15 2`
+      second=`expr substr ${date} 18 2`
+    ;;
+    'YmdHMS')
+##  [YYYY][MM][DD][HH][MI][SS]
+      year=`expr substr ${date} 1 4`
+      month=`expr substr ${date} 5 2`
+      day=`expr substr ${date} 7 2`
+      hour=`expr substr ${date} 9 2`
+      minute=`expr substr ${date} 11 2`
+      second=`expr substr ${date} 13 2`
+    ;;
+  esac
+
+  case ${output} in
+    'YmdHMS')
+      echo ${year}${month}${day}${hour}${minute}${second}  
+    ;;
+    'Y m d H M S')
+      echo ${year}" "${month}" "${day}" "${hour}" "${minute}" "${second}
+    ;;
+    'Y-m-dTH:M:S')  
+      echo ${year}"-"${month}"-"${day}"T"${hour}":"${minute}":"${second}
+    ;;
+    'Y-m-d_H:M:S')  
+      echo ${year}"-"${month}"-"${day}"_"${hour}":"${minute}":"${second}
+    ;;
+    'Ymd')
+      echo ${year}${month}${day}
+    ;;
+  esac
+}
+

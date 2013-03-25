@@ -1,0 +1,7 @@
+1 Mohandas_Karamchand_Ghandi India 1915-1947 Independence
+2 Albert_Einstein Germany 1955 Nuclear_bomb
+3 Rigoberta_Menchu Guatemala 1960-1996 Indigenous_Rights
+4 Aung_San_Suu_Kyi Burma 1989-2010 Freedom
+5 Nelson_Mandela South_Africa 1955-1994 anti-Apartheid
+6 Desmond_Tutu South_Africa 1996 Reconciliation
+

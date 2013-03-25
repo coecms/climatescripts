@@ -1,0 +1,11 @@
+function give_sec() {
+# Function to give a 'N' # of section of a string with 'char' as delimiter
+## g.e. #
+# $ give_sec Climate m 2
+# ate
+  string=$1
+  char=$2
+  N=$3
+  
+  echo $string" "${char}" "${N} | awk '{split($1,words,$2); print words[$3]}'
+} 

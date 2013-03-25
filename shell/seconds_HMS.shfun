@@ -1,0 +1,13 @@
+function seconds_HMS() {
+# Function to transform from seconds to Hour, minutes and seconds
+## g.e. #
+# $ seconds_HMS 86764
+# 24 06 04
+  secs=$1
+
+  Hour=`expr ${secs} / 3600 | awk '{printf("%02d",$1)}'`
+  Min=`echo ${secs}" "${Hour}" 3600 60" | awk '{printf("%02d",($1-$2*$3)/$4)}'`
+  Sec=`echo ${secs}" "${Hour}" "${Min}" 3600 60" | awk '{printf("%02d",$1-$2*$4-$3*$5)}'`
+
+  echo ${Hour}" "${Min}" "${Sec}
+}

@@ -1,0 +1,24 @@
+ascii_raw_html2 () {
+# Function to create a raw 'html' file (with <br> at the end of each line) of a given ascii file
+  foresth=$1
+  file=$2
+  numlines=`wc -l ${file} | awk '{print $1}'`
+  ilin=1
+  while test ${ilin} -le ${numlines}
+  do
+    if test ${ilin} -eq 1
+    then
+      line=$(head -n 1 $2)
+      cat <<- EOF > $2.html
+      ${line}<br>
+      EOF
+    else
+      line=$(head -n ${ilin} $2 | tail -n 1)
+      cat <<- EOF >> $2.html
+      ${line}<br>
+      EOF
+    fi
+    ilin=`expr $ilin + 1`
+  ### end number of lines
+  done
+}

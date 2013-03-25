@@ -1,0 +1,23 @@
+function days_mon(){
+# Gives the number of days of month for a given year
+## g.e. #
+# $ days_month 1976 2
+# 29
+  yr=$1
+  mon=$2
+  monS=`printf "%02d" ${mon}`
+  datei=${yr}'-'${monS}'-01'
+  mon1=`expr ${mon} + 1`
+  monS=`printf "%02d" ${mon1}`
+  if test ${mon1} -gt 12; then
+    yr=`expr ${yr} + 1`
+    monS='01'
+  fi
+  datef=${yr}'-'${monS}'-01'
+  seci=`date -u +%s -d"${datei}"`
+  secf=`date -u +%s -d"${datef}"`
+  diffsec=`expr ${secf} - ${seci}`
+  diffdays=`expr ${diffsec} / 3600 / 24`
+#  echo ${datei}" "${datef}
+  echo ${diffdays}
+}

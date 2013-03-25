@@ -1,0 +1,14 @@
+function days_yr(){
+# Gives the number of days of a given year
+# $ days_yr 1976
+# 366
+  yr=$1
+  datei=${yr}'-'01'-01'
+  yr1=`expr ${yr} + 1`
+  datef=${yr1}'-'01'-01'
+  seci=`date -u +%s -d"${datei}"`
+  secf=`date -u +%s -d"${datef}"`
+  diffsec=`expr ${secf} - ${seci}`
+  diffdays=`expr ${diffsec} / 3600 / 24`
+  echo ${diffdays}
+}

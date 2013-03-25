@@ -1,0 +1,25 @@
+### Full scripts ###
+* book_prepare.bash: Shell to prepare pdf as a book (it uses pdftk)
+* seconds_between-dates.bash: Difference in seconds between two dates (up to days) DATE2 - DATE1 
+
+### Functions ###
+* check_execution.shfun: Checking if the execution of a program has worked
+* col_line.shfun: Function to convert a desired colum list of values from a file to 1 line
+* createIndexesBox.shfun: Function to give the NE, grid points of a 
+  pair of a SW vertex
+* days_mon: Gives the number of days of month for a given year (using date)
+* days_month.shfun: Function to give the number of days of a given month
+* days_yr: Gives the number of days of a given year (using date)
+* decimal2binary.shfun: Transforms a number to its binary in base 2
+* extract_date.shfun: Function to give date in a series formats and give another series of outputs
+* give_from_list.shfun: Function to give a number of item from a 'char' separated list
+* give_sec.shfun: Function to give a 'N' # of section of a string with 'char' as delimiter
+* isin_list.shfun: Function to check whether a value is in a list of values separated by ':'
+* last_word.shfun: Function that gives the last word of a line selected by a key-word from a given file
+* leave_firstN.shfun: Function to leave first N characters
+* leave_lastN.shfun: Function to leave last N characters
+* leave_list.shfun: Function to leave a list of non-coincident values from another one (both separated by ':')
+* remove_car.shfun: Function to remove a number of characters from a word
+* seconds_HMS.shfun: transform from seconds to Hour, minutes and seconds 
+
+[return to main](https://github.com/LluisFita/climatescripts/wiki)

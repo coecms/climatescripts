@@ -1,0 +1,13 @@
+function give_from_list(){
+# Function to give a number of item from a 'char' separated list
+## g.e. #
+# $ give_from_list Climate:Change:Research:Center : 3
+# Research
+#
+  list=$1
+  char=$2
+  num=$3
+  
+  value=`echo ${list} | tr ${char} '\n' | head -n ${num} | tail -n 1`
+  echo ${value}
+}

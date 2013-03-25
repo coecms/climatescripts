@@ -1,0 +1,35 @@
+function col_line() {
+#Function to convert a desired colum list of values from a file to 1 line
+#   file: file name
+#   col: desired column
+## g.e. #
+# $ col_line ASCII_file.txt 3
+# India Germany Guatemala Burma South_Africa South_Africa
+
+  file=$1
+  col=$2
+  
+  Nlines=`wc -l ${file} | awk '{print $1}'`
+  iline=1
+  words=''
+  while test ${iline} -le $Nlines
+  do
+    case ${col} in
+      1) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $1}'`;;
+      2) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $2}'`;;
+      3) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $3}'`;;
+      4) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $4}'`;;
+      5) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $5}'`;;
+      6) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $6}'`;;
+      7) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $7}'`;;
+      8) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $8}'`;;
+      9) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $9}'`;;
+      10) word=`head -n ${iline} ${file} | tail -n 1 | awk '{print $10}'`;;
+      *) echo "Column from file: '"${col}"' too large!";exit;;
+    esac
+    words=${words}' '${word}
+    iline=`expr ${iline} + 1`
+  done # end of Nlines
+
+  echo ${words}
+}

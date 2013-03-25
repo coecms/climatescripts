@@ -1,0 +1,16 @@
+function last_word() {
+# Function that gives the last word of a line selected by a key-word from a 
+#    given file
+## g.e. #
+# $ last_word ASCII_file.txt Einstein
+# Nuclear_bomb
+#
+  file=$1
+  keyword=$2
+
+  fline=`cat ${file} | grep ${keyword}`
+  nword=`echo ${fline} | wc -w | awk '{print $1}'`
+  fline=`echo ${fline} | tr ' ' ':'`
+  word=`echo $fline" "$nword | awk '{split($1,words,":"); print words[$2]}'`
+  echo $word
+}
