@@ -3,4 +3,4 @@
 ### Functions ###
 * AWAP_functions.py: functions to querry AWAP data which lives at "/srv/ccrc/data02/z3236814/data/AWAP/DAILY/netcdf"
 
-[return to main](https://github.com/LluisFita/climatescripts/wiki)
+[return to main](https://github.com/coecms/climatescripts/wiki)
