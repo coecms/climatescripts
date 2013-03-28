@@ -1,0 +1,24 @@
+&datainf
+ dimx =   125,
+ dimy =   100,
+ dimt =   10,
+ varname = 'testvar',
+ varstdname = 'testvar', 
+ varlonname = 'netCDF test to write a variable using Fortran', 
+ varunits = '--',
+ ofile = 'netCDF_test.nc',
+ fillvalue = 1.e20,
+/
+
+&projectioninf
+ projname = 'latitude_longitude',
+ first_lon = 105.0,
+ first_lat = -50.0,
+ first_time = 229776,
+ lon_inc = 0.5,
+ lat_inc = 0.5,
+ time_inc = 1.
+ timeunits = 'hours since 1949-12-01 00:00:00'
+ timecalendar = 'standard'
+/
+
