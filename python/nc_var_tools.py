@@ -1,48 +1,3 @@
-# netCDF utilities
-# L. Fita, CCRC - ARC CoE CSS, UNSW, Sydney, Australia
-####### ###### ##### #### ### ## #
-## valmod: Function to modify the value of a variable
-## rangedim: Gives the instruction to retrieve values from a dimension of a variable
-## varaddref: Function to add a variable in an existing file copying characteristics from an existing one
-## varout: Function when we want to output variable values
-## chdimname: Changing the name of the dimension
-## chvarname: Changing the name of the variable
-## searchInlist: Function to search a value within a list
-## set_attribute: Sets a value of an attribute of a netCDF variable. Removes previous attribute value if exists
-## set_attributek: Sets a value of an attribute of a netCDF variable with a kind. Removes previous attribute value if exists
-## gaddattr: Add a global attribute to a netCDF. Removes previous attribute if it exist
-## gaddattrk: Add a global attribute to a netCDF caring about the type. Removes previous attribute if it exist
-## varaddattr: Add an attribute to a variable. Removes previous attribute if it exists
-## varaddattrk: Add an attribute to a variable caring about the type
-## varrmattr: Removing an attribute from a variable
-## grmattr: Removing a global attribute
-## fvaradd: Adding variable (and all its attributes and dimensions) from a reference file to a file
-## fdimadd: Adding dimension from another reference file 
-## fattradd: Adding attributes from a reference file
-## fgaddattr: Adding global attributes from a reference file
-## varrm: Removing a variable from a file
-## ivars: Give all the variable names of a file
-## igattrs: Give all the global attributes of a file
-## isgattrs: Give a single global attribute of a file and its type
-## ivattrs: Give all the attributes of a variable and its type
-## isvattrs: Give a single attribute of a variable
-## grattr: Function to read a global atribute
-## vrattr: Function to remove an atribute from a variable
-## datetimeStr_datetime: Function to transform a string date ([YYYY]-[MM]-[DD]_[HH]:[MI]:[SS] format ) to a date object
-## dateStr_date: Function to transform a string date ([YYYY]-[MM]-[DD] format) to a date object
-## timeStr_time: Function to transform a string date ([HH]:[MI]:[SS] format) to a time object
-## time_information: Function to provide information about variable time
-## CFtimes_datetime: Provide date/time array from a file with a series of netCDF CF-compilant time variable
-## variable_inf: Class to provide the information from a given variable
-## subyrs: Function to retrieve a series of years from a file
-## submns: Function to retrieve a series of months from a file
-## statsValWeigthed: Weigthed Statistics class
-## stats2Val: two variables Statistics class
-## statsVal: Statistics class
-## spacemean: Function to retrieve a space mean series from a multidimensional variable of a file
-## timemean: Function to retrieve a time mean series from a multidimensional variable of a file
-##
-
 import numpy as np
 from netCDF4 import Dataset as NetCDFFile
 import os
@@ -324,7 +279,6 @@ def varout(values, ncfile, varn):
   values = [optsIrange]:[optsErange]
     [optsIrange]: val1,val2,...,valN inital value for the 'N' dimensions of the variable
     [optsErange]: val1,val2,...,valN ending value for the 'N' dimensions of the variable
-    -1 for all range of values
   ncfile = netCDF file name
   varn = variable name
   """
@@ -2577,7 +2531,14 @@ def spacemean(ncfile, varn):
     else:
       print ist, statsn[ist]##, ': ', varstats[int(dimt/2),ist]
       newvar = ncfo.createVariable(varn + statsn[ist], vartype, vardimnames, fill_value=varfil)
-      newvar[:] = varstats[:,ist]
+      if varshape == 2:
+        newvar[:] = varstats[:,ist]*1.
+      elif varshape == 3:
+        newvar[:] = varstats[:,:,ist]*1.
+      elif varshape == 4:
+        newvar[:] = varstats[:,:,:,ist]*1.
+      elif varshape == 5:
+        newvar[:] = varstats[:,:,:,:,ist]*1.
 
     newvar = ncfo.variables[varn + statsn[ist]]
     for attr in varattr:
@@ -3068,3 +3029,69 @@ def timemean(values, ncfile, varn):
   fgaddattr(ncfile, ofile)
 
   print '    timemean: File "' + ofile + '" as time mean of "' + varn + '" has been created'
+
+### Options
+##string_operation="operation to make: " + '\n' + " out, output values -S inidim1,[inidim2,...]:enddim1,[enddim2,...]"
+"""operation to make: 
+  addfattr, add a attributes to a variable from another file and -S [file]:[var] 
+  addfdim, add a new dimension from another file and -S [file]:[dimension] 
+  addfgattr, add global attribute from another fiel and -S [file]
+  addfvar, add a new variable from another file and -S [file]:[variable] 
+  addgattr, add a new global attribute: addatr -S [attrname]|[attrvalue]
+  addgattrk, add a new global attribute: addatr -S [attrname]|[attrvalue]|[kind(S (!, white spaces),I,R,D)]
+  addref, add a new variable with dimension and attributes from an already existing 'variable ref' in the file and -S [variable ref]:[attr name]@[value]:[[attr2]@[value2], ...]:[value/file with values]  mname, modify name -S newname
+  addvattr, add a new attribute to any given variable: addvattr -S [attrname]|[attrvalue]
+  addvattrk, add a new attribute to any given variable: addvattrk -S [attrname]|[attrvalue]|[kind(S (!, white spaces),I,R,D)]
+  infgattrs, give the values of all the global attributes of the file
+  infsinggattrs, give the value of a single global attribute of the file
+  infsingvattrs, give the value of a single attribute of the variable
+  infvars, give the names of all the variables of the file
+  infvattrs, give the values of all the attributes of a variable
+  mdname, modify dimension name -S olddname:newdname
+  means, computes the spatial mean of the variable
+  meant, computes the temporal mean of the variable -S [power](power of the polynomial fit)
+  mname, modify name -S newname
+  out, output values -S inidim1,[inidim2,...]:enddim1,[enddim2,...]
+  rgattr, read a global attribute: rgattr -S [attrname]
+  rvattr, read a variable attribute: rvattr -S [attrname]
+  rmgattr, remove a global attribute: rmgattr -S [attrname]
+  rmvariable, remove a variable: rmvariable
+  rmvattr, remove an attribute to any given variable: rmvattr -S [attrname]
+  subsetmns, retrieve a subset of values based on months: subsetmns -S [MM1]:[...:[MMn]] or [MMi]-[MMe] for a period (output as 'subsetmns.nc')
+  subsetyrs, retrieve a subset of values based on years: subsetyrs -S [YYYY1]:[...:[YYYYn]] or [YYYYi]-[YYYYe] for a period (output as 'subsetyrs.nc')
+  valmod, modifiy values of variable -S [modification]:
+     sumc,[constant]: add [constant] to variables values
+     subc,[constant]: substract [constant] to variables values
+     mulc,[constant]: multipy by [constant] to variables values
+     divc,[constant]: divide by [constant] to variables values
+     lowthres,[threshold],[newvalue]: modify all values below [threshold] to [newvalue]
+     upthres,[threshold],[newvalue]: modify all values above [threshold] to [newvalue]
+
+'addfattr': fattradd(opts.varname, opts.values, opts.ncfile)
+'addfdim': fdimadd(opts.values, opts.ncfile)
+'addfgattr': fgaddattr(opts.values, opts.ncfile)
+'addfvar': fvaradd(opts.values, opts.ncfile)
+'addgattr': gaddattr(opts.values, opts.ncfile)
+'addgattrk': gaddattrk(opts.values, opts.ncfile)
+'addref': varaddref(opts.values, opts.ncfile, opts.varname)
+'addvattr': varaddattr(opts.values, opts.ncfile, opts.varname)
+'addvattrk': varaddattrk(opts.values, opts.ncfile, opts.varname)
+'infgattrs': igattr(opts.ncfile)
+'infsinggattrs': isgattr(opts.values, opts.ncfile)
+'infsingvattrs': isgattr(opts.values, opts.ncfile, opts.varname)
+'infvars': ivars(opts.ncfile)
+'infvattrs': ivattr(opts.ncfile, opts.varname)
+'mdname': chdimname(opts.values, opts.ncfile, opts.varname)
+'means': spacemean(opts.ncfile, opts.varname)
+'meant': timemean(opts.values, opts.ncfile, opts.varname)
+'mname': chvarname(opts.values, opts.ncfile, opts.varname)
+'rgattr': grattr(opts.values, opts.ncfile)
+'rvattr': vrattr(opts.values, opts.ncfile, opts.varname)
+'rmgattr': grmattr(opts.values, opts.ncfile)
+'rmvariable': varrm(opts.ncfile, opts.varname)
+'rmvattr': varrmattr(opts.values, opts.ncfile, opts.varname)
+'subsetmns': submns(opts.values, opts.ncfile, opts.varname)
+'subsetyrs': subyrs(opts.values, opts.ncfile, opts.varname)
+'out': varout(opts.values, opts.ncfile, opts.varname)
+'valmod': valmod(opts.values, opts.ncfile, opts.varname)
+"""

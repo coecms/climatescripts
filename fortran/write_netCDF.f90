@@ -14,37 +14,66 @@ PROGRAM write_netCDF
 
   INCLUDE 'netcdf.inc'
 
-  CHARACTER(LEN=500)                                     :: ofile
-  INTEGER                                                :: oid, rcode
   INTEGER                                                :: ix, iy, it
+  CHARACTER(LEN=500)                                     :: ofile
+  INTEGER                                                :: oid, rcode, funit, ios
   INTEGER                                                :: dimx, dimy, dimt, dimxid, dimyid, dimtid
+  REAL                                                   :: first_lon, first_lat, first_time, lon_inc, lat_inc, time_inc
   INTEGER                                                :: vardid, varnumid
   CHARACTER(LEN=50)                                      :: section, varname, varn
-  CHARACTER(LEN=250)                                     :: messg, text
+  CHARACTER(LEN=200)                                     :: varstdname, varlonname, varunits, gridmap_name, timeunits, timecalendar
+  CHARACTER(LEN=250)                                     :: projname, messg, text
   INTEGER, DIMENSION(3)                                  :: vardims, idstart, idcount
   REAL, ALLOCATABLE, DIMENSION(:,:,:)                    :: varvals
   INTEGER, DIMENSION(1)                                  :: dimvdims
   INTEGER, ALLOCATABLE, DIMENSION(:)                     :: dimxvals, dimyvals
   REAL, ALLOCATABLE, DIMENSION(:)                        :: dimtvals
   REAL                                                   :: fillvalue
+  LOGICAL                                                :: is_used
+  CHARACTER(LEN=200),DIMENSION(3)                        :: basic_attributes
 
-!!!!!!! 
+  NAMELIST /datainf/ dimx, dimy, dimt, varname, varstdname, varlonname, varunits, ofile, fillvalue
+  NAMELIST /projectioninf/ projname, first_lon, first_lat, first_time, lon_inc, lat_inc, time_inc, timeunits, timecalendar
 
-  fillvalue = 1.e20
+!!!!!!! Functions & Subroutines
+! def_variable: Subroutine to define a variable
+! gridmap_name: Function to provide the standard CF-compilant projection name
 
-  dimx = 125
-  dimy = 100
-  dimt = 10
+!!!!!!! Variables
+! dim[x/y/t]: dimension of the variable (assumed a 3D time, lat, lon variable)
+! varname: name of the variable
+! varstdname: standard name of the variable
+! varlonname: long name of the variable
+! varunits: units of the variable
+! ofile: output filename
+! fillvalue: value for missing values
+! projname: name of the projection (only longitude-latitude)
+! first_[lon/lat]: first longitude/latitude/time values (remember coordinates must increase!)
+! [lon/lat/time]_inc: longitude, latitude and time increments
+! timeunits: units of the time variable
+! timecalendar: calendar of the time
+
+! Reading namelist
+!!
+  DO funit=10,100
+    INQUIRE(unit=funit, opened=is_used)
+    IF (.not. is_used) EXIT
+  END DO
+
+  OPEN(funit,file='namelist.write_netcdf',status='old',form='formatted',iostat=ios)
+  IF ( ios /= 0 ) STOP "ERROR opening namelist.write_netCDF"
+  READ(funit,datainf)
+  READ(funit,projectioninf)
+  CLOSE(funit)
+
   dimxid = 1
   dimyid = 2
   dimtid = 3
 
-  varname = 'testvar'
   vardims = (/ dimxid, dimyid, dimtid /)
   varnumid = 0
 
-  ofile = "netCDF_test.nc"
-
+! Running program
 !!!!!!! !!!!!! !!!!! !!!! !!! !! !
 
   section="write_netCDF"
@@ -55,64 +84,63 @@ PROGRAM write_netCDF
 !!
 ! Deffinition section
 !!  
-  rcode = nf90_def_dim(oid, 'x', dimx, dimxid)
+  rcode = nf90_def_dim(oid, 'lon', dimx, dimxid)
   !CALL error_nc(section, rcode)
-  rcode = nf90_def_dim(oid, 'y', dimy, dimyid)
+  rcode = nf90_def_dim(oid, 'lat', dimy, dimyid)
   !CALL error_nc(section, rcode)
-  rcode = nf90_def_dim(oid, 'time', dimt, dimtid)
+  rcode = nf90_def_dim(oid, 'time', NF90_UNLIMITED, dimtid)
   !CALL error_nc(section, rcode)
 
 ! Coordinate variables
 !!
-  varn = 'x'
-  vardid = 1
+  varn = 'lon'
   dimvdims = (/ dimxid /)
+  basic_attributes(1) = "lon"
+  basic_attributes(2) = "longitude"
+  basic_attributes(3) = "degrees_east"
 
   varnumid = varnumid + 1
-  rcode = nf90_def_var(oid, TRIM(varn), NF90_DOUBLE, dimvdims, varnumid)
-  !CALL error_nc(section, rcode)
+  CALL def_variable(oid,varn, varnumid, 1, dimvdims, NF90_DOUBLE, basic_attributes)
 
-  rcode = nf90_put_att(oid, varnumid, "units", "-")
-  rcode = nf90_put_att(oid, varnumid, "standard_name", "x")
-  rcode = nf90_put_att(oid, varnumid, "long_name", "x-axis")
-
-  varn = 'y'
-  vardid = 2
+  varn = 'lat'
   dimvdims = (/ dimyid /)
+  basic_attributes(1) = "lat"
+  basic_attributes(2) = "latitude"
+  basic_attributes(3) = "degrees_north"
 
   varnumid = varnumid + 1
-  rcode = nf90_def_var(oid, TRIM(varn), NF90_DOUBLE, dimvdims, varnumid)
-  !CALL error_nc(section, rcode)
-
-  rcode = nf90_put_att(oid, varnumid, "units", "-")
-  rcode = nf90_put_att(oid, varnumid, "standard_name", "y")
-  rcode = nf90_put_att(oid, varnumid, "long_name", "y-axis")
+  CALL def_variable(oid,varn, varnumid, 1, dimvdims, NF90_DOUBLE, basic_attributes)
 
   varn = 'time'
-  vardid = 3
   dimvdims = (/ dimtid /)
+  basic_attributes(1) = "time"
+  basic_attributes(2) = "time"
+  basic_attributes(3) = timeunits
 
   varnumid = varnumid + 1
-  rcode = nf90_def_var(oid, TRIM(varn), NF90_DOUBLE, dimvdims, varnumid)
-  !CALL error_nc(section, rcode)
+  CALL def_variable(oid,varn, varnumid, 1, dimvdims, NF90_DOUBLE, basic_attributes)
 
-  rcode = nf90_put_att(oid, varnumid, "units", "hours since 1949-12-01 00:00:00")
-  rcode = nf90_put_att(oid, varnumid, "standard_name", "time")
-  rcode = nf90_put_att(oid, varnumid, "long_name", "time")
+  rcode = nf90_put_att(oid, varnumid, "calendar", TRIM(timecalendar))
 
 ! Variable definition
 !!
   varn = varname
+  basic_attributes(1) = varstdname
+  basic_attributes(2) = varlonname
+  basic_attributes(3) = varunits
 
   varnumid = varnumid + 1
-  rcode = nf90_def_var(oid, TRIM(varn), NF90_FLOAT, vardims, varnumid)
-  !CALL error_nc(section, rcode)
+  CALL def_variable(oid,varn, varnumid, 3, vardims, NF90_DOUBLE, basic_attributes)
+  rcode = nf90_put_att(oid, varnumid, "grid_mapping", TRIM(projname))
+  rcode = nf90_put_att(oid, varnumid, "coordinates", "lon lat")
 
-  rcode = nf90_put_att(oid, varnumid, "units", "--")
-  rcode = nf90_put_att(oid, varnumid, "coordinates", "x y")
-  rcode = nf90_put_att(oid, varnumid, "standard_name", varname)
-  rcode = nf90_put_att(oid, varnumid, "long_name", "netCDF test to write a variable using Fortran")
-  rcode = nf90_put_att(oid, varnumid, "_FillValue", fillvalue)
+! Variable projection definition
+!!
+  varn = projname
+
+  varnumid = varnumid + 1
+  rcode = nf90_def_var(ncid=oid, name=TRIM(varn), xtype=NF90_CHAR, varid=varnumid)
+  rcode = nf90_put_att(oid, varnumid, "grid_mapping_name", TRIM(gridmap_name(projname)))
 
 ! Global attributes
 !!
@@ -133,7 +161,7 @@ PROGRAM write_netCDF
   ALLOCATE(dimxvals(dimx))
 
   DO ix= 1, dimx
-    dimxvals(ix) = ix
+    dimxvals(ix) = first_lon + lon_inc*(ix-1)
   END DO
 
   varnumid = varnumid + 1
@@ -144,7 +172,7 @@ PROGRAM write_netCDF
   ALLOCATE(dimyvals(dimy))
 
   DO iy= 1, dimy
-    dimyvals(iy) = iy
+    dimyvals(iy) = first_lat + lat_inc*(iy-1)
   END DO
 
   varnumid = varnumid + 1
@@ -155,7 +183,7 @@ PROGRAM write_netCDF
   ALLOCATE(dimtvals(dimt))
 
   DO it= 1, dimt
-    dimtvals(it) = it*1.
+    dimtvals(it) = first_time + time_inc*(it-1)
   END DO
 
   varnumid = varnumid + 1
@@ -188,3 +216,79 @@ PROGRAM write_netCDF
   !CALL error_nc(section, rcode)
 
 END PROGRAM write_netCDF
+
+SUBROUTINE def_variable(ncf,varname, varnid, varNdims, vardims, vartype, basicattrs)
+! Subroutine to define a variable
+
+  USE netcdf
+
+  IMPLICIT NONE
+
+  INCLUDE 'netcdf.inc'
+
+  CHARACTER(LEN=50), INTENT(IN)                          :: varname
+  INTEGER, INTENT(IN)                                    :: ncf,varnid, varNdims, vartype
+  INTEGER, DIMENSION(varNdims), INTENT(IN)               :: vardims
+  CHARACTER(LEN=200), DIMENSION(3), INTENT(IN)           :: basicattrs
+  INTEGER                                                :: rc, varid
+
+!!!!!!! Variables
+! ncf: netCDF unit number
+! varname: name of the variable
+! varNdims: number of dimensions of the variable
+! vardims: vector with the dimensions id
+! vartpye: type of variable
+! basicattrs: basic attributes (standard_name, long_name, units)
+  varid = varnid
+
+  rc = nf90_def_var(ncf, TRIM(varname), vartype, vardims, varid)
+
+  rc = nf90_put_att(ncf, varnid, "standard_name", TRIM(basicattrs(1)))
+  rc = nf90_put_att(ncf, varnid, "long_name", TRIM(basicattrs(2)))
+  rc = nf90_put_att(ncf, varnid, "units", TRIM(basicattrs(3)))
+
+END SUBROUTINE def_variable
+
+CHARACTER(LEN=200) FUNCTION gridmap_name(proj)
+! Function to provide the standard CF-compilant projection name
+!   Following CF-conventions: http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#appendix-grid-mappings
+  CHARACTER(LEN=200), INTENT(IN)                         :: proj
+
+!!!!!!! Variables
+! proj: projection name
+
+  SELECT CASE (proj)
+    CASE('albers_conical_equal_area')
+      gridmap_name = 'Albers_Equal_Area'
+    CASE('azimuthal_equidistant')
+      gridmap_name = 'Azimuthal_Equidistant'
+    CASE('lambert_azimuthal_equal_area')
+      gridmap_name = 'Lambert_azimuthal_equal_area'
+    CASE('lambert_conformal_conic')
+      gridmap_name = 'Lambert_Conformal'
+    CASE('lambert_cylindrical_equal_area')
+      gridmap_name = 'Lambert_Cylindrical_Equal_Area'
+    CASE('latitude_longitude')
+      gridmap_name = 'Latitude_Longitude'
+    CASE('mercator')
+      gridmap_name = 'Mercator'
+    CASE('orthographic')
+      gridmap_name = 'Orthographic'
+    CASE('polar_stereographic')
+      gridmap_name = 'Polar_stereographic'
+    CASE('rotated_latitude_longitude')
+      gridmap_name = 'Rotated_pole'
+    CASE('stereographic')
+      gridmap_name = 'Stereographic'
+    CASE('transverse_mercator')
+      gridmap_name = 'Transverse_Mercator'
+    CASE('vertical_perspective')
+      gridmap_name = 'Vertical_perspective'
+    CASE DEFAULT
+      PRINT *, 'ERROR -- error -- ERROR -- error'
+      PRINT *, '  gridmap_name: projection name "' // TRIM(proj) // '" is not ready !!!'
+      STOP
+
+  END SELECT
+
+END FUNCTION gridmap_name
