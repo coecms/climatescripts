@@ -2531,14 +2531,12 @@ def spacemean(ncfile, varn):
     else:
       print ist, statsn[ist]##, ': ', varstats[int(dimt/2),ist]
       newvar = ncfo.createVariable(varn + statsn[ist], vartype, vardimnames, fill_value=varfil)
-      if varshape == 2:
+      if varshape == 3:
         newvar[:] = varstats[:,ist]*1.
-      elif varshape == 3:
-        newvar[:] = varstats[:,:,ist]*1.
       elif varshape == 4:
-        newvar[:] = varstats[:,:,:,ist]*1.
+        newvar[:] = varstats[:,:,ist]*1.
       elif varshape == 5:
-        newvar[:] = varstats[:,:,:,:,ist]*1.
+        newvar[:] = varstats[:,:,:,ist]*1.
 
     newvar = ncfo.variables[varn + statsn[ist]]
     for attr in varattr:
