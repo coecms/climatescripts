@@ -1,6 +1,48 @@
 ### Full scripts ###
+* nc_var.py: Script to call all the 'nc_var_tools.py' netCDF functions
 
 ### Functions ###
 * AWAP_functions.py: functions to querry AWAP data which lives at "/srv/ccrc/data02/z3236814/data/AWAP/DAILY/netcdf"
+* nc_var_tools.py: netCDF utilities
+ * CFtimes_datetime: Provide date/time array from a file with a series of netCDF CF-compilant time variable
+ * chdimname: Changing the name of the dimension
+ * chvarname: Changing the name of the variable
+ * dateStr_date: Function to transform a string date ([YYYY]-[MM]-[DD] format) to a date object
+ * datetimeStr_datetime: Function to transform a string date ([YYYY]-[MM]-[DD]_[HH]:[MI]:[SS] format ) to a date object
+ * fattradd: Adding attributes from a reference file
+ * fdimadd: Adding dimension from another reference file 
+ * fgaddattr: Adding global attributes from a reference file
+ * fvaradd: Adding variable (and all its attributes and dimensions) from a reference file to a file
+ * gaddattr: Add a global attribute to a netCDF. Removes previous attribute if it exist
+ * gaddattrk: Add a global attribute to a netCDF caring about the type. Removes previous attribute if it exist
+ * grattr: Function to read a global atribute
+ * grmattr: Removing a global attribute
+ * igattrs: Give all the global attributes of a file
+ * isgattrs: Give a single global attribute of a file and its type
+ * isvattrs: Give a single attribute of a variable
+ * ivars: Give all the variable names of a file
+ * ivattrs: Give all the attributes of a variable and its type
+ * rangedim: Gives the instruction to retrieve values from a dimension of a variable
+ * searchInlist: Function to search a value within a list
+ * set_attribute: Sets a value of an attribute of a netCDF variable. Removes previous attribute value if exists
+ * set_attributek: Sets a value of an attribute of a netCDF variable with a kind. Removes previous attribute value if exists
+ * spacemean: Function to retrieve a space mean series from a multidimensional variable of a file
+ * stats2Val: two variables Statistics class
+ * statsVal: Statistics class
+ * statsValWeigthed: Weigthed Statistics class
+ * submns: Function to retrieve a series of months from a file
+ * subyrs: Function to retrieve a series of years from a file
+ * time_information: Function to provide information about variable time
+ * timemean: Function to retrieve a time mean series from a multidimensional variable of a file
+ * timeStr_time: Function to transform a string date ([HH]:[MI]:[SS] format) to a time object
+ * valmod: Function to modify the value of a variable
+ * variable_inf: Class to provide the information from a given variable
+ * varaddattr: Add an attribute to a variable. Removes previous attribute if it exists
+ * varaddattrk: Add an attribute to a variable caring about the type
+ * varaddref: Function to add a variable in an existing file copying characteristics from an existing one
+ * varout: Function when we want to output variable values
+ * varrm: Removing a variable from a file
+ * varrmattr: Removing an attribute from a variable
+ * vrattr: Function to remove an atribute from a variable
 
 [return to main](https://github.com/coecms/climatescripts/wiki)
