@@ -1,5 +1,7 @@
-### Full scripts ###
+﻿### Full scripts ###
 * nc_var.py: Script to call all the 'nc_var_tools.py' netCDF functions
+* extremefields.py: Calculate the range of fields in number of standard deviations from the mean
+    Useful for checking the stability of fields, e.g. if a field value dramatically diverges from the rest
 
 ### Functions ###
 * AWAP_functions.py: functions to querry AWAP data which lives at "/srv/ccrc/data02/z3236814/data/AWAP/DAILY/netcdf"
