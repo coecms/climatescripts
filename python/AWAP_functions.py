@@ -103,7 +103,7 @@ def get_data_any_month_awapV3(year,month,var='pre'): #set var with a default val
    if var == "tmax" or var == "tmin":
       val_return = np.mean(f_open.variables[var].data[Julian_day_start-1:Julian_day_end-1,:,:],0)
    else:
-      val_retrun = np.sum(f_open.variables[var].data[Julian_day_start-1:Julian_day_end-1,:,:],0)
+      val_return = np.sum(f_open.variables[var].data[Julian_day_start-1:Julian_day_end-1,:,:],0)
 
    f_open.close()
 # return the value
@@ -140,6 +140,6 @@ def get_data_any_season_awapV3(year,season,var='pre'):
       val_return = np.mean(np.array([get_data_any_month_awapV3(months_years[1,0],months_years[0,0],var), \
                                      get_data_any_month_awapV3(months_years[1,1],months_years[0,1],var), \
                                      get_data_any_month_awapV3(months_years[1,2],months_years[0,2],var)]),0) 
-   print(val_return.shape)
+#   print(val_return.shape)
    return(val_return) 
 #-----------------------------------------------------------------------------------------------------
