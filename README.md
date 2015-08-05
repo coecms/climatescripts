@@ -47,3 +47,9 @@ Please review other people's code whenever possible
 Very good basic GIT tutorials can be found at: http://git-scm.com/book/en/Getting-Started-Git-Basics
 In a netshell: git status; git add; git commit; git push; pull request
 It is usually better to commit incrementally, rather than once-off with lots of changes to the code 
+
+Running tests
+-------------
+
+Tests in this repository get automatically run by travis-ci.org. You can add
+your own tests by editing the `Makefile`
